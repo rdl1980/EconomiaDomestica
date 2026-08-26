@@ -1,0 +1,24 @@
+{
+  "name": "@ed/core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dominio puro di Economia Domestica: tipi, validazione, normalizzazione, matching, calcoli. Nessuna dipendenza da React, Next o Supabase.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

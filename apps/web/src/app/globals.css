@@ -1,0 +1,228 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Design tokens
+
+   Un solo posto in cui vivono colori, raggi e ombre. I componenti leggono i
+   token e non scrivono mai valori letterali: così il tema scuro non diventa una
+   lista di eccezioni sparse e un restyling non tocca i componenti.
+   ========================================================================== */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Superfici: neutro leggermente caldo, meno clinico del grigio puro */
+  --bg: oklch(99% 0.004 95);
+  --surface: oklch(100% 0 0);
+  --surface-2: oklch(97% 0.006 95);
+  --border: oklch(91% 0.006 95);
+  --border-strong: oklch(84% 0.008 95);
+
+  --fg: oklch(21% 0.012 275);
+  --fg-muted: oklch(52% 0.014 275);
+  --fg-subtle: oklch(66% 0.012 275);
+
+  /* Identità: indaco-violetto, il colore delle azioni */
+  --primary: oklch(53% 0.21 285);
+  --primary-hover: oklch(48% 0.21 285);
+  --primary-fg: oklch(99% 0 0);
+  --primary-soft: oklch(95% 0.03 285);
+
+  /* Semantica del denaro */
+  --positive: oklch(62% 0.16 155);
+  --positive-soft: oklch(95% 0.04 155);
+  --negative: oklch(58% 0.21 20);
+  --negative-soft: oklch(95% 0.03 20);
+  --warning: oklch(72% 0.16 75);
+  --warning-soft: oklch(96% 0.05 75);
+
+  --ring: oklch(53% 0.21 285 / 0.45);
+
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+
+  --shadow-soft: 0 1px 2px oklch(21% 0.012 275 / 0.04), 0 4px 16px oklch(21% 0.012 275 / 0.06);
+  --shadow-lift: 0 2px 4px oklch(21% 0.012 275 / 0.06), 0 12px 32px oklch(21% 0.012 275 / 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: oklch(16% 0.012 275);
+    --surface: oklch(20% 0.014 275);
+    --surface-2: oklch(24% 0.016 275);
+    --border: oklch(28% 0.016 275);
+    --border-strong: oklch(36% 0.018 275);
+
+    --fg: oklch(96% 0.006 275);
+    --fg-muted: oklch(72% 0.012 275);
+    --fg-subtle: oklch(56% 0.014 275);
+
+    --primary: oklch(70% 0.17 285);
+    --primary-hover: oklch(76% 0.17 285);
+    --primary-fg: oklch(18% 0.02 285);
+    --primary-soft: oklch(28% 0.06 285);
+
+    --positive: oklch(74% 0.15 155);
+    --positive-soft: oklch(27% 0.05 155);
+    --negative: oklch(70% 0.17 20);
+    --negative-soft: oklch(27% 0.05 20);
+    --warning: oklch(80% 0.14 75);
+    --warning-soft: oklch(28% 0.05 75);
+
+    --ring: oklch(70% 0.17 285 / 0.5);
+
+    --shadow-soft: 0 1px 2px oklch(0% 0 0 / 0.3), 0 4px 16px oklch(0% 0 0 / 0.35);
+    --shadow-lift: 0 2px 4px oklch(0% 0 0 / 0.35), 0 12px 32px oklch(0% 0 0 / 0.45);
+  }
+}
+
+.dark {
+  --bg: oklch(16% 0.012 275);
+  --surface: oklch(20% 0.014 275);
+  --surface-2: oklch(24% 0.016 275);
+  --border: oklch(28% 0.016 275);
+  --border-strong: oklch(36% 0.018 275);
+
+  --fg: oklch(96% 0.006 275);
+  --fg-muted: oklch(72% 0.012 275);
+  --fg-subtle: oklch(56% 0.014 275);
+
+  --primary: oklch(70% 0.17 285);
+  --primary-hover: oklch(76% 0.17 285);
+  --primary-fg: oklch(18% 0.02 285);
+  --primary-soft: oklch(28% 0.06 285);
+
+  --positive: oklch(74% 0.15 155);
+  --positive-soft: oklch(27% 0.05 155);
+  --negative: oklch(70% 0.17 20);
+  --negative-soft: oklch(27% 0.05 20);
+  --warning: oklch(80% 0.14 75);
+  --warning-soft: oklch(28% 0.05 75);
+
+  --ring: oklch(70% 0.17 285 / 0.5);
+
+  --shadow-soft: 0 1px 2px oklch(0% 0 0 / 0.3), 0 4px 16px oklch(0% 0 0 / 0.35);
+  --shadow-lift: 0 2px 4px oklch(0% 0 0 / 0.35), 0 12px 32px oklch(0% 0 0 / 0.45);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+  --color-negative: var(--negative);
+  --color-negative-soft: var(--negative-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+
+  --radius-card: var(--radius-card);
+  --radius-control: var(--radius-control);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-lift: var(--shadow-lift);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: light dark;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  /* L'app vive dentro un telefono: niente rimbalzo orizzontale. */
+  overflow-x: hidden;
+}
+
+/* I numeri in colonna devono incolonnarsi davvero. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* L'area sicura sotto la bottom nav su iPhone. */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.h-safe-nav {
+  height: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+/* ==========================================================================
+   Movimento: breve, mai in mezzo ai piedi
+   ========================================================================== */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

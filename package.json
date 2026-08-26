@@ -1,0 +1,26 @@
+{
+  "name": "economia-domestica",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gestione dell'economia domestica: scontrini, spesa, utenze.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @ed/web",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "db:migrate": "npm run migrate --workspace @ed/db",
+    "db:reset": "npm run reset --workspace @ed/db"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
