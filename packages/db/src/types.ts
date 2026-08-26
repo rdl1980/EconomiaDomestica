@@ -51,12 +51,28 @@ export type DocumentStatus =
   | 'discarded';
 export type TransactionModule = 'spesa' | 'utenze' | 'abbonamenti' | 'altro';
 
-/** Row -> {Row, Insert, Update}: `K` sono le colonne obbligatorie in insert. */
-type Tbl<R, K extends keyof R> = {
+/**
+ * Row -> {Row, Insert, Update}: `K` sono le colonne obbligatorie in insert,
+ * `Rels` le foreign key.
+ *
+ * Le relazioni non sono decorative: supabase-js le usa per tipizzare le select
+ * annidate (`vendor:vendor_id(name)`). Senza, il risultato di quelle query
+ * diventa `never` e ogni accesso a un campo e' un errore di compilazione.
+ */
+type Tbl<R, K extends keyof R, Rels extends readonly unknown[] = []> = {
   Row: R;
   Insert: Pick<R, K> & Partial<Omit<R, K>>;
   Update: Partial<R>;
-  Relationships: [];
+  Relationships: Rels;
+};
+
+/** Foreign key a colonna singola verso la chiave primaria di un'altra tabella. */
+type Fk<Name extends string, Column extends string, Target extends string> = {
+  foreignKeyName: Name;
+  columns: [Column];
+  isOneToOne: false;
+  referencedRelation: Target;
+  referencedColumns: ['id'];
 };
 
 export type HouseholdRow = {
@@ -218,14 +234,49 @@ export type Database = {
   public: {
     Tables: {
       household: Tbl<HouseholdRow, 'name'>;
-      member: Tbl<MemberRow, 'household_id' | 'user_id' | 'display_name'>;
-      household_invite: Tbl<HouseholdInviteRow, 'household_id' | 'code'>;
-      category: Tbl<CategoryRow, 'name' | 'slug'>;
-      vendor: Tbl<VendorRow, 'household_id' | 'name'>;
-      document: Tbl<DocumentRow, 'household_id' | 'source'>;
+      member: Tbl<
+        MemberRow,
+        'household_id' | 'user_id' | 'display_name',
+        [Fk<'member_household_id_fkey', 'household_id', 'household'>]
+      >;
+      household_invite: Tbl<
+        HouseholdInviteRow,
+        'household_id' | 'code',
+        [
+          Fk<'household_invite_household_id_fkey', 'household_id', 'household'>,
+          Fk<'household_invite_created_by_fkey', 'created_by', 'member'>,
+        ]
+      >;
+      category: Tbl<
+        CategoryRow,
+        'name' | 'slug',
+        [
+          Fk<'category_household_id_fkey', 'household_id', 'household'>,
+          Fk<'category_parent_id_fkey', 'parent_id', 'category'>,
+        ]
+      >;
+      vendor: Tbl<
+        VendorRow,
+        'household_id' | 'name',
+        [Fk<'vendor_household_id_fkey', 'household_id', 'household'>]
+      >;
+      document: Tbl<
+        DocumentRow,
+        'household_id' | 'source',
+        [
+          Fk<'document_household_id_fkey', 'household_id', 'household'>,
+          Fk<'document_created_by_fkey', 'created_by', 'member'>,
+        ]
+      >;
       transaction: Tbl<
         TransactionRow,
-        'household_id' | 'occurred_at' | 'total_amount'
+        'household_id' | 'occurred_at' | 'total_amount',
+        [
+          Fk<'transaction_household_id_fkey', 'household_id', 'household'>,
+          Fk<'transaction_vendor_id_fkey', 'vendor_id', 'vendor'>,
+          Fk<'transaction_document_id_fkey', 'document_id', 'document'>,
+          Fk<'transaction_created_by_fkey', 'created_by', 'member'>,
+        ]
       >;
       line_item: Tbl<
         LineItemRow,
@@ -237,12 +288,30 @@ export type Database = {
         | 'unit'
         | 'unit_price'
         | 'gross_amount'
-        | 'net_amount'
+        | 'net_amount',
+        [
+          Fk<'line_item_household_id_fkey', 'household_id', 'household'>,
+          Fk<'line_item_transaction_id_fkey', 'transaction_id', 'transaction'>,
+          Fk<'line_item_product_fk', 'product_id', 'product'>,
+          Fk<'line_item_category_id_fkey', 'category_id', 'category'>,
+        ]
       >;
-      product: Tbl<ProductRow, 'household_id' | 'name'>;
+      product: Tbl<
+        ProductRow,
+        'household_id' | 'name',
+        [
+          Fk<'product_household_id_fkey', 'household_id', 'household'>,
+          Fk<'product_default_category_id_fkey', 'default_category_id', 'category'>,
+        ]
+      >;
       product_alias: Tbl<
         ProductAliasRow,
-        'household_id' | 'normalized' | 'product_id'
+        'household_id' | 'normalized' | 'product_id',
+        [
+          Fk<'product_alias_household_id_fkey', 'household_id', 'household'>,
+          Fk<'product_alias_vendor_id_fkey', 'vendor_id', 'vendor'>,
+          Fk<'product_alias_product_id_fkey', 'product_id', 'product'>,
+        ]
       >;
       price_observation: Tbl<
         PriceObservationRow,
@@ -250,7 +319,13 @@ export type Database = {
         | 'product_id'
         | 'observed_on'
         | 'normalized_unit'
-        | 'unit_price_normalized'
+        | 'unit_price_normalized',
+        [
+          Fk<'price_observation_household_id_fkey', 'household_id', 'household'>,
+          Fk<'price_observation_product_id_fkey', 'product_id', 'product'>,
+          Fk<'price_observation_vendor_id_fkey', 'vendor_id', 'vendor'>,
+          Fk<'price_observation_line_item_id_fkey', 'line_item_id', 'line_item'>,
+        ]
       >;
     };
     Views: Record<string, never>;

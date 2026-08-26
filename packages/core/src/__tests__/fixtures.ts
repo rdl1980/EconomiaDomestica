@@ -1,4 +1,4 @@
-import type { ReceiptDraft } from '../receipt/draft.js';
+import type { ReceiptDraft } from '../receipt/draft';
 
 /**
  * Scontrino realistico: prodotti a pezzo, prodotti a peso, uno sconto riga.

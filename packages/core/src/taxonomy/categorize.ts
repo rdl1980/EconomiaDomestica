@@ -12,8 +12,8 @@
  * i grafici in silenzio.
  */
 
-import { normalizeDescription } from '../matching/normalize.js';
-import { UNCATEGORIZED_SLUG, findSeedCategory } from './categories.js';
+import { normalizeDescription } from '../matching/normalize';
+import { UNCATEGORIZED_SLUG, findSeedCategory } from './categories';
 
 export interface CategoryRule {
   slug: string;

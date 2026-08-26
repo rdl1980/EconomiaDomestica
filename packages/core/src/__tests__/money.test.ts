@@ -8,7 +8,7 @@ import {
   sumCents,
   toCents,
   totalToleranceCents,
-} from '../money.js';
+} from '../money';
 
 describe('money', () => {
   it('converte euro in centesimi senza errori di virgola mobile', () => {

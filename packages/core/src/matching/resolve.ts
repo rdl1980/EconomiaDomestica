@@ -8,8 +8,8 @@
  * categorizzare, che almeno si vede.
  */
 
-import { normalizeDescription, normalizeVendorName } from './normalize.js';
-import { rankCandidates, similarityScore, type ScoredCandidate } from './similarity.js';
+import { normalizeDescription, normalizeVendorName } from './normalize';
+import { rankCandidates, similarityScore, type ScoredCandidate } from './similarity';
 
 /** Soglia oltre la quale il match viene applicato senza chiedere conferma. */
 export const AUTO_MATCH_THRESHOLD = 0.86;

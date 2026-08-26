@@ -1,2 +1,2 @@
-export * from './types.js';
-export * from './mappers.js';
+export * from './types';
+export * from './mappers';

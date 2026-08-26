@@ -7,7 +7,7 @@
  * supermercati - cioe' il motivo per cui esiste l'app - non funziona.
  */
 
-import { roundQuantity, roundUnitPrice } from './money.js';
+import { roundQuantity, roundUnitPrice } from './money';
 
 export const UNITS = ['pcs', 'kg', 'l'] as const;
 export type Unit = (typeof UNITS)[number];

@@ -13,7 +13,7 @@
  */
 
 import { z } from 'zod';
-import { UNITS } from '../units.js';
+import { UNITS } from '../units';
 
 export const SCHEMA_VERSION = '1.0' as const;
 

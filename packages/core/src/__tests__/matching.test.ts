@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeDescription, normalizeVendorName, suggestProductName } from '../matching/normalize.js';
-import { resolveProduct, resolveVendor } from '../matching/resolve.js';
-import { similarityScore, trigramSimilarity } from '../matching/similarity.js';
-import { categorizeLine } from '../taxonomy/categorize.js';
-import { categoryPath, rootCategory } from '../taxonomy/categories.js';
+import { normalizeDescription, normalizeVendorName, suggestProductName } from '../matching/normalize';
+import { resolveProduct, resolveVendor } from '../matching/resolve';
+import { similarityScore, trigramSimilarity } from '../matching/similarity';
+import { categorizeLine } from '../taxonomy/categorize';
+import { categoryPath, rootCategory } from '../taxonomy/categories';
 
 describe('normalizeDescription', () => {
   it('produce una chiave stabile a prescindere da punteggiatura e maiuscole', () => {

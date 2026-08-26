@@ -10,7 +10,7 @@
  */
 
 import { toCents, type Cents } from '@ed/core';
-import type { LineItemRow, Numeric, TransactionRow } from './types.js';
+import type { LineItemRow, Numeric, TransactionRow } from './types';
 
 export function numericToCents(value: Numeric | null | undefined): Cents {
   if (value == null) return 0;

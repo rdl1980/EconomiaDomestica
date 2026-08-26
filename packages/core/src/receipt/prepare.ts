@@ -7,8 +7,8 @@
  * testabile per intero e riutilizzabile identica lato client e lato server.
  */
 
-import { toCents, type Cents } from '../money.js';
-import { suggestProductName } from '../matching/normalize.js';
+import { toCents, type Cents } from '../money';
+import { suggestProductName } from '../matching/normalize';
 import {
   resolveProduct,
   resolveVendor,
@@ -16,11 +16,11 @@ import {
   type MatchOutcome,
   type ProductCandidate,
   type VendorCandidate,
-} from '../matching/resolve.js';
-import { categorizeLine, type CategorizationResult } from '../taxonomy/categorize.js';
-import { normalizePrice, parsePackageSize, type NormalizedPrice, type Unit } from '../units.js';
-import type { ReceiptDraft, ReceiptLineDraft } from './draft.js';
-import { validateDraft, type DraftValidation, type LineIssue } from './validate.js';
+} from '../matching/resolve';
+import { categorizeLine, type CategorizationResult } from '../taxonomy/categorize';
+import { normalizePrice, parsePackageSize, type NormalizedPrice, type Unit } from '../units';
+import type { ReceiptDraft, ReceiptLineDraft } from './draft';
+import { validateDraft, type DraftValidation, type LineIssue } from './validate';
 
 export interface CatalogContext {
   vendors: readonly VendorCandidate[];

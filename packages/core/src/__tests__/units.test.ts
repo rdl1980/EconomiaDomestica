@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizePrice, parsePackageSize } from '../units.js';
+import { normalizePrice, parsePackageSize } from '../units';
 
 describe('normalizePrice', () => {
   it('lascia invariati i prezzi gia espressi al kg', () => {

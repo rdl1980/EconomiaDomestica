@@ -6,18 +6,19 @@
  * database. È la parte che sopravvive a un cambio di frontend o di backend.
  */
 
-export * from './money.js';
-export * from './units.js';
+export * from './money';
+export * from './units';
 
-export * from './receipt/draft.js';
-export * from './receipt/validate.js';
-export * from './receipt/prepare.js';
+export * from './receipt/draft';
+export * from './receipt/validate';
+export * from './receipt/json-schema';
+export * from './receipt/prepare';
 
-export * from './matching/normalize.js';
-export * from './matching/similarity.js';
-export * from './matching/resolve.js';
+export * from './matching/normalize';
+export * from './matching/similarity';
+export * from './matching/resolve';
 
-export * from './taxonomy/categories.js';
-export * from './taxonomy/categorize.js';
+export * from './taxonomy/categories';
+export * from './taxonomy/categorize';
 
-export * from './analytics/period.js';
+export * from './analytics/period';

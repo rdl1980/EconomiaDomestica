@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { parseReceiptDraft, parseReceiptDraftJson } from '../receipt/draft.js';
-import { prepareReceipt } from '../receipt/prepare.js';
-import { hasBlockingIssues, validateDraft } from '../receipt/validate.js';
-import { draftWith, esselungaDraft } from './fixtures.js';
+import { parseReceiptDraft, parseReceiptDraftJson } from '../receipt/draft';
+import { prepareReceipt } from '../receipt/prepare';
+import { hasBlockingIssues, validateDraft } from '../receipt/validate';
+import { draftWith, esselungaDraft } from './fixtures';
 
 describe('parseReceiptDraft', () => {
   it('accetta un draft conforme', () => {

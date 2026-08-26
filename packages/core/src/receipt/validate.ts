@@ -19,8 +19,8 @@ import {
   totalToleranceCents,
   withinTolerance,
   type Cents,
-} from '../money.js';
-import type { ReceiptDraft, ReceiptLineDraft } from './draft.js';
+} from '../money';
+import type { ReceiptDraft, ReceiptLineDraft } from './draft';
 
 export type IssueSeverity = 'error' | 'warning';
 
