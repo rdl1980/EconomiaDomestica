@@ -230,6 +230,55 @@ export type PriceObservationRow = {
   created_at: Timestamptz;
 }
 
+export type UtilityType =
+  | 'energia_elettrica'
+  | 'gas'
+  | 'acqua'
+  | 'rifiuti'
+  | 'telefonia'
+  | 'internet'
+  | 'altro';
+
+export type UtilityContractRow = {
+  id: Uuid;
+  household_id: Uuid;
+  vendor_id: Uuid | null;
+  type: UtilityType;
+  name: string;
+  code: string | null;
+  consumption_unit: string | null;
+  category_id: Uuid | null;
+  started_on: DateOnly | null;
+  ended_on: DateOnly | null;
+  notes: string | null;
+  created_at: Timestamptz;
+  updated_at: Timestamptz;
+};
+
+export type UtilityBillRow = {
+  id: Uuid;
+  household_id: Uuid;
+  contract_id: Uuid;
+  transaction_id: Uuid | null;
+  document_id: Uuid | null;
+  period_start: DateOnly;
+  period_end: DateOnly;
+  issued_on: DateOnly | null;
+  due_on: DateOnly | null;
+  amount: Numeric;
+  consumption: Numeric | null;
+  fixed_amount: Numeric | null;
+  variable_amount: Numeric | null;
+  taxes_amount: Numeric | null;
+  meter_start: Numeric | null;
+  meter_end: Numeric | null;
+  is_estimated: boolean;
+  notes: string | null;
+  created_by: Uuid | null;
+  created_at: Timestamptz;
+  updated_at: Timestamptz;
+};
+
 /** Riga della vista di fatto `v_expense_line`: riga di spesa con le sue dimensioni. */
 export type ExpenseLineViewRow = {
   line_item_id: Uuid;
@@ -341,6 +390,24 @@ export type Database = {
           Fk<'product_alias_product_id_fkey', 'product_id', 'product'>,
         ]
       >;
+      utility_contract: Tbl<
+        UtilityContractRow,
+        'household_id' | 'type' | 'name',
+        [
+          Fk<'utility_contract_household_id_fkey', 'household_id', 'household'>,
+          Fk<'utility_contract_vendor_id_fkey', 'vendor_id', 'vendor'>,
+          Fk<'utility_contract_category_id_fkey', 'category_id', 'category'>,
+        ]
+      >;
+      utility_bill: Tbl<
+        UtilityBillRow,
+        'household_id' | 'contract_id' | 'period_start' | 'period_end' | 'amount',
+        [
+          Fk<'utility_bill_household_id_fkey', 'household_id', 'household'>,
+          Fk<'utility_bill_contract_id_fkey', 'contract_id', 'utility_contract'>,
+          Fk<'utility_bill_transaction_id_fkey', 'transaction_id', 'transaction'>,
+        ]
+      >;
       price_observation: Tbl<
         PriceObservationRow,
         | 'household_id'
@@ -406,6 +473,136 @@ export type Database = {
       spend_by_month: {
         Args: { p_household: Uuid; p_months?: number };
         Returns: { month: DateOnly; total: Numeric; transaction_count: number }[];
+      };
+      product_price_summary: {
+        Args: { p_household: Uuid; p_from: DateOnly; p_to: DateOnly; p_limit?: number };
+        Returns: {
+          product_id: Uuid;
+          product_name: string;
+          normalized_unit: Unit;
+          observations: number;
+          vendor_count: number;
+          last_price: Numeric | null;
+          last_observed_on: DateOnly | null;
+          average_price: Numeric | null;
+          best_price: Numeric | null;
+          best_vendor_id: Uuid | null;
+          best_vendor_name: string | null;
+          worst_price: Numeric | null;
+          spend_total: Numeric;
+          potential_saving: Numeric;
+        }[];
+      };
+      product_price_history: {
+        Args: { p_household: Uuid; p_product: Uuid };
+        Returns: {
+          observed_on: DateOnly;
+          vendor_id: Uuid | null;
+          vendor_name: string;
+          unit_price_normalized: Numeric;
+          normalized_unit: Unit;
+          was_discounted: boolean;
+        }[];
+      };
+      product_price_by_vendor: {
+        Args: { p_household: Uuid; p_product: Uuid };
+        Returns: {
+          vendor_id: Uuid | null;
+          vendor_name: string;
+          observations: number;
+          average_price: Numeric;
+          best_price: Numeric;
+          last_price: Numeric;
+          last_observed_on: DateOnly;
+        }[];
+      };
+      personal_inflation: {
+        Args: { p_household: Uuid; p_months?: number };
+        Returns: { month: DateOnly; index_value: Numeric | null; product_count: number }[];
+      };
+      record_utility_bill: {
+        Args: {
+          p_contract: Uuid;
+          p_period_start: DateOnly;
+          p_period_end: DateOnly;
+          p_amount: number;
+          p_consumption?: number | null;
+          p_issued_on?: DateOnly | null;
+          p_due_on?: DateOnly | null;
+          p_fixed?: number | null;
+          p_variable?: number | null;
+          p_taxes?: number | null;
+          p_meter_start?: number | null;
+          p_meter_end?: number | null;
+          p_is_estimated?: boolean;
+          p_notes?: string | null;
+        };
+        Returns: Uuid;
+      };
+      utility_series: {
+        Args: { p_household: Uuid; p_contract: Uuid };
+        Returns: {
+          bill_id: Uuid;
+          period_start: DateOnly;
+          period_end: DateOnly;
+          days: number;
+          amount: Numeric;
+          consumption: Numeric | null;
+          unit_cost: Numeric | null;
+          daily_amount: Numeric;
+          daily_consumption: Numeric | null;
+          is_estimated: boolean;
+        }[];
+      };
+      utility_decomposition: {
+        Args: { p_household: Uuid; p_contract: Uuid };
+        Returns: {
+          current_period_start: DateOnly;
+          previous_period_start: DateOnly;
+          amount_delta: Numeric;
+          consumption_effect: Numeric | null;
+          price_effect: Numeric | null;
+          mixed_effect: Numeric | null;
+        }[];
+      };
+      merge_products: {
+        Args: { p_source: Uuid; p_target: Uuid };
+        Returns: undefined;
+      };
+      create_household_invite: {
+        Args: { p_household: Uuid; p_role?: 'adult' | 'viewer' };
+        Returns: string;
+      };
+      product_catalog: {
+        Args: { p_household: Uuid };
+        Returns: {
+          product_id: Uuid;
+          name: string;
+          brand: string | null;
+          default_unit: Unit;
+          category_slug: string | null;
+          category_name: string | null;
+          category_color: string | null;
+          package_size: Numeric | null;
+          package_unit: Unit | null;
+          alias_count: number;
+          line_count: number;
+          spend_total: Numeric;
+          last_bought: DateOnly | null;
+        }[];
+      };
+      real_deals: {
+        Args: { p_household: Uuid; p_min_observations?: number; p_limit?: number };
+        Returns: {
+          product_id: Uuid;
+          product_name: string;
+          vendor_name: string;
+          normalized_unit: Unit;
+          last_price: Numeric;
+          median_price: Numeric;
+          discount_ratio: Numeric;
+          observed_on: DateOnly;
+        }[];
       };
       top_products: {
         Args: {

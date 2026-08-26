@@ -1,5 +1,10 @@
 # 06 - Roadmap
 
+> **Stato al 26 agosto 2026** — M0, M1, M2, M3 e M4 sono implementate e
+> compilano; le migration sono verificate su un Postgres reale (in WASM) dalla
+> CI. Manca **l'applicazione delle migration sul progetto Supabase**: finché non
+> viene fatta, l'app non ha un database dietro. Vedi il fondo pagina.
+
 Ogni milestone e' pensata per chiudersi con qualcosa di **usabile davvero**, non con
 un pezzo di infrastruttura. Il criterio e' sempre lo stesso: alla fine della
 milestone, l'app fa qualcosa in piu' che prima non poteva fare.
@@ -72,3 +77,27 @@ valere piu' di un foglio Excel.
 Da riconsiderare piu' avanti, non da dimenticare: import da conto corrente
 (PSD2/open banking), gestione cespiti e manutenzioni casa, scadenzario documenti,
 divisione spese fra coinquilini, export fiscale.
+
+---
+
+## Stato attuale
+
+| M | Stato | Note |
+|---|---|---|
+| M0 | fatto | monorepo, dominio, schema, auth, shell |
+| M1 | fatto | tre sorgenti di ingestion, revisione, conferma nel ledger |
+| M2 | fatto | dashboard, aggregazioni SQL, filtri nell'URL |
+| M3 | fatto | catalogo, alias, confronto prezzi, inflazione personale, offerte vere |
+| M4 | fatto | contratti, bollette con consumo, scomposizione prezzo/consumo |
+| M5 | da fare | PWA e Capacitor |
+| M6 | da fare | budget, previsioni, avvisi |
+
+### Cosa manca per usarla davvero
+
+1. **Applicare le migration** al progetto Supabase (`npm run db:migrate` con
+   `DATABASE_URL` valorizzata, oppure incollando i file di
+   `packages/db/migrations` nel SQL Editor **in ordine**).
+2. **Deploy su Vercel**, collegando il repository e impostando
+   `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+3. **Opzionale**: `ANTHROPIC_API_KEY` per la lettura automatica delle foto.
+   Senza, restano l'import JSON e l'inserimento manuale.

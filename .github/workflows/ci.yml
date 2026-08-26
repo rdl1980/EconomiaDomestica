@@ -21,7 +21,10 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Test
+      # Applica tutte le migration su un Postgres reale in WASM: intercetta gli
+      # errori SQL che altrimenti si scoprirebbero solo al primo deploy, a
+      # schema gia' mezzo applicato.
+      - name: Test (dominio + migration)
         run: npm test
 
       # Il build ha bisogno delle variabili Supabase solo per esistere: i valori

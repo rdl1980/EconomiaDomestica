@@ -5,7 +5,29 @@ App per la gestione dell'economia domestica: si parte dagli scontrini della spes
 per estendersi a utenze energetiche, telefonia, abbonamenti e qualunque altra voce
 di spesa familiare.
 
-**Stato: pianificazione.** Nessun codice applicativo ancora, solo design.
+**Stato: M0-M4 implementate.** Spesa e utenze, dalla foto dello scontrino alla
+dashboard, al confronto prezzi fra supermercati. Manca l'applicazione delle
+migration sul progetto Supabase: vedi [Avvio](#avvio).
+
+## Avvio
+
+```bash
+npm install
+cp .env.example .env.local   # e compila le variabili
+npm run db:migrate           # applica le migration a Supabase
+npm run dev
+```
+
+| Comando | Cosa fa |
+|---|---|
+| `npm run dev` | avvia l'app su http://localhost:3000 |
+| `npm test` | test del dominio + migration eseguite su Postgres in WASM |
+| `npm run typecheck` | TypeScript su tutti i workspace |
+| `npm run db:migrate` | applica le migration mancanti |
+| `npm run db:migrate -- --status` | mostra quali sono applicate |
+
+Il progetto e' un monorepo npm: `apps/web` (Next.js), `packages/core` (dominio
+puro, senza React ne' Supabase), `packages/db` (schema, migration, tipi).
 
 ## Documentazione
 
