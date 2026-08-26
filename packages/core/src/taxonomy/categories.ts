@@ -8,6 +8,18 @@
  * I domini oltre `spesa` sono già qui anche se i moduli corrispondenti arrivano
  * dopo: così la dashboard totale ha senso fin dal primo giorno e non serve una
  * migrazione quando si accende il modulo utenze.
+ *
+ * Colori: quelli delle **categorie radice** sono la palette categoriale dei
+ * grafici, scelti in ordine fisso e verificati per separazione in daltonismo e
+ * contrasto sulla superficie, sia in tema chiaro sia in tema scuro. Lo stesso
+ * colore vale in entrambi i temi, così l'identità di una categoria non cambia
+ * quando cambia il tema. I due slot grigi ("Altro" e "Da categorizzare") sono
+ * volutamente neutri: sono il fondo di scala, non una categoria fra le altre.
+ * Non riordinare né ritoccare a occhio questi colori: la palette è stata
+ * validata come insieme, e cambiarne uno invalida le distanze fra gli altri.
+ *
+ * I colori delle sottocategorie servono al drill-down dentro una sola radice e
+ * non compaiono mai insieme nello stesso grafico di primo livello.
  */
 
 export const CATEGORY_DOMAINS = [
@@ -60,12 +72,12 @@ export const SEED_CATEGORIES: readonly SeedCategory[] = [
   { slug: 'casa-pulizia', name: 'Casa e pulizia', domain: 'spesa', parent: null, icon: 'spray-can', color: '#6366f1' },
   { slug: 'detersivi', name: 'Detersivi', domain: 'spesa', parent: 'casa-pulizia', icon: 'spray-can', color: '#818cf8' },
   { slug: 'carta-casa', name: 'Carta e usa e getta', domain: 'spesa', parent: 'casa-pulizia', icon: 'scroll', color: '#a5b4fc' },
-  { slug: 'cura-persona', name: 'Cura della persona', domain: 'spesa', parent: null, icon: 'sparkles', color: '#ec4899' },
+  { slug: 'cura-persona', name: 'Cura della persona', domain: 'spesa', parent: null, icon: 'sparkles', color: '#db2777' },
   { slug: 'animali', name: 'Animali domestici', domain: 'spesa', parent: null, icon: 'paw-print', color: '#a16207' },
   { slug: 'spesa-altro', name: 'Altro (spesa)', domain: 'spesa', parent: null, icon: 'circle-help', color: '#94a3b8' },
 
   // ------------------------------------------------------------------- Utenze
-  { slug: 'utenze', name: 'Utenze', domain: 'utenze', parent: null, icon: 'plug-zap', color: '#f97316' },
+  { slug: 'utenze', name: 'Utenze', domain: 'utenze', parent: null, icon: 'plug-zap', color: '#ea580c' },
   { slug: 'energia-elettrica', name: 'Energia elettrica', domain: 'utenze', parent: 'utenze', icon: 'zap', color: '#facc15' },
   { slug: 'gas', name: 'Gas', domain: 'utenze', parent: 'utenze', icon: 'flame', color: '#fb923c' },
   { slug: 'acqua-utenza', name: 'Acqua', domain: 'utenze', parent: 'utenze', icon: 'droplet', color: '#38bdf8' },
@@ -81,19 +93,19 @@ export const SEED_CATEGORIES: readonly SeedCategory[] = [
   { slug: 'arredamento', name: 'Arredamento', domain: 'casa', parent: 'abitazione', icon: 'lamp', color: '#99f6e4' },
 
   // ---------------------------------------------------------------- Trasporti
-  { slug: 'trasporti', name: 'Trasporti', domain: 'trasporti', parent: null, icon: 'car', color: '#475569' },
+  { slug: 'trasporti', name: 'Trasporti', domain: 'trasporti', parent: null, icon: 'car', color: '#b45309' },
   { slug: 'carburante', name: 'Carburante', domain: 'trasporti', parent: 'trasporti', icon: 'fuel', color: '#64748b' },
   { slug: 'assicurazione-auto', name: 'Assicurazione e bollo', domain: 'trasporti', parent: 'trasporti', icon: 'shield', color: '#94a3b8' },
   { slug: 'manutenzione-auto', name: 'Manutenzione veicolo', domain: 'trasporti', parent: 'trasporti', icon: 'wrench', color: '#cbd5e1' },
   { slug: 'trasporto-pubblico', name: 'Trasporto pubblico', domain: 'trasporti', parent: 'trasporti', icon: 'bus', color: '#334155' },
 
   // ------------------------------------------------------------------- Salute
-  { slug: 'salute', name: 'Salute', domain: 'salute', parent: null, icon: 'heart-pulse', color: '#e11d48' },
+  { slug: 'salute', name: 'Salute', domain: 'salute', parent: null, icon: 'heart-pulse', color: '#dc2626' },
   { slug: 'farmaci', name: 'Farmaci e parafarmacia', domain: 'salute', parent: 'salute', icon: 'pill', color: '#f43f5e' },
   { slug: 'visite', name: 'Visite ed esami', domain: 'salute', parent: 'salute', icon: 'stethoscope', color: '#fb7185' },
 
   // -------------------------------------------------------------- Tempo libero
-  { slug: 'tempo-libero', name: 'Tempo libero', domain: 'tempo_libero', parent: null, icon: 'party-popper', color: '#a855f7' },
+  { slug: 'tempo-libero', name: 'Tempo libero', domain: 'tempo_libero', parent: null, icon: 'party-popper', color: '#9333ea' },
   { slug: 'ristoranti', name: 'Ristoranti e bar', domain: 'tempo_libero', parent: 'tempo-libero', icon: 'utensils', color: '#c084fc' },
   { slug: 'abbonamenti', name: 'Abbonamenti digitali', domain: 'tempo_libero', parent: 'tempo-libero', icon: 'monitor-play', color: '#d8b4fe' },
   { slug: 'viaggi', name: 'Viaggi', domain: 'tempo_libero', parent: 'tempo-libero', icon: 'plane', color: '#e9d5ff' },

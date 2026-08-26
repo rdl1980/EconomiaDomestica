@@ -230,6 +230,34 @@ export type PriceObservationRow = {
   created_at: Timestamptz;
 }
 
+/** Riga della vista di fatto `v_expense_line`: riga di spesa con le sue dimensioni. */
+export type ExpenseLineViewRow = {
+  line_item_id: Uuid;
+  household_id: Uuid;
+  transaction_id: Uuid;
+  occurred_at: Timestamptz;
+  occurred_on: DateOnly;
+  module: TransactionModule;
+  vendor_id: Uuid | null;
+  vendor_name: string | null;
+  product_id: Uuid | null;
+  product_name: string | null;
+  category_id: Uuid | null;
+  category_slug: string | null;
+  category_name: string | null;
+  category_color: string | null;
+  root_category_slug: string | null;
+  root_category_name: string | null;
+  root_category_color: string | null;
+  raw_description: string;
+  quantity: Numeric;
+  unit: Unit;
+  unit_price: Numeric;
+  net_amount: Numeric;
+  discount_amount: Numeric;
+  created_by: Uuid | null;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -328,7 +356,9 @@ export type Database = {
         ]
       >;
     };
-    Views: Record<string, never>;
+    Views: {
+      v_expense_line: { Row: ExpenseLineViewRow; Relationships: [] };
+    };
     Functions: {
       create_household: {
         Args: { p_name: string; p_display_name: string };
@@ -341,6 +371,58 @@ export type Database = {
       current_household_ids: {
         Args: Record<string, never>;
         Returns: Uuid[];
+      };
+      dashboard_summary: {
+        Args: { p_household: Uuid; p_from: Timestamptz; p_to: Timestamptz };
+        Returns: {
+          total: Numeric;
+          transaction_count: number;
+          line_count: number;
+          average_ticket: Numeric;
+          discount_total: Numeric;
+          uncategorized_total: Numeric;
+        }[];
+      };
+      spend_by_category: {
+        Args: { p_household: Uuid; p_from: Timestamptz; p_to: Timestamptz };
+        Returns: {
+          slug: string;
+          name: string;
+          color: string;
+          total: Numeric;
+          line_count: number;
+        }[];
+      };
+      spend_by_vendor: {
+        Args: { p_household: Uuid; p_from: Timestamptz; p_to: Timestamptz };
+        Returns: {
+          vendor_id: Uuid | null;
+          name: string;
+          total: Numeric;
+          transaction_count: number;
+          average_ticket: Numeric;
+        }[];
+      };
+      spend_by_month: {
+        Args: { p_household: Uuid; p_months?: number };
+        Returns: { month: DateOnly; total: Numeric; transaction_count: number }[];
+      };
+      top_products: {
+        Args: {
+          p_household: Uuid;
+          p_from: Timestamptz;
+          p_to: Timestamptz;
+          p_limit?: number;
+        };
+        Returns: {
+          product_id: Uuid;
+          name: string;
+          category_color: string;
+          total: Numeric;
+          times: number;
+          total_quantity: Numeric;
+          unit: Unit;
+        }[];
       };
     };
     Enums: Record<string, never>;
