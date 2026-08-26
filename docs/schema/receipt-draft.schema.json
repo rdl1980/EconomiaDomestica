@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/rdl1980/EconomiaDomestica/docs/schema/receipt-draft.schema.json",
+  "title": "ReceiptDraft",
+  "description": "Contratto canonico di uno scontrino, prodotto da qualunque sorgente di ingestion (vision LLM, import esterno, inserimento manuale) e consumato dalla pipeline. Importi in euro, punto come separatore decimale.",
+  "type": "object",
+  "required": ["schema_version", "source", "vendor", "purchased_at", "currency", "total_amount", "lines"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "source": {
+      "type": "string",
+      "enum": ["vision", "external", "manual"],
+      "description": "Come e' stato prodotto questo draft."
+    },
+    "vendor": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "description": "Insegna come appare sullo scontrino, es. 'ESSELUNGA'." },
+        "chain": { "type": ["string", "null"], "description": "Catena normalizzata, se riconoscibile." },
+        "address": { "type": ["string", "null"] },
+        "city": { "type": ["string", "null"] },
+        "vat_number": { "type": ["string", "null"], "description": "Partita IVA, se stampata." }
+      }
+    },
+    "purchased_at": {
+      "type": "string",
+      "description": "Data e ora dell'acquisto in ISO 8601. Se l'ora non e' leggibile usare 00:00 e segnalarlo in warnings."
+    },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "default": "EUR" },
+    "payment_method": {
+      "type": ["string", "null"],
+      "enum": ["contanti", "carta", "bancomat", "buoni_pasto", "app", "altro", null]
+    },
+    "total_amount": { "type": "number", "description": "Totale effettivamente pagato, al netto degli sconti." },
+    "discount_total": { "type": ["number", "null"], "description": "Sconti complessivi applicati sul totale." },
+    "loyalty": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "card_last4": { "type": ["string", "null"] },
+        "points_earned": { "type": ["number", "null"] },
+        "points_redeemed": { "type": ["number", "null"] }
+      }
+    },
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["line_no", "raw_description", "quantity", "unit", "unit_price", "net_amount"],
+        "additionalProperties": false,
+        "properties": {
+          "line_no": { "type": "integer", "minimum": 1, "description": "Ordine della riga sullo scontrino." },
+          "raw_description": { "type": "string", "description": "Descrizione ESATTA come stampata, abbreviazioni incluse. Non normalizzare: serve per l'apprendimento degli alias." },
+          "quantity": { "type": "number", "exclusiveMinimum": 0, "description": "Numero di pezzi, oppure peso/volume per i prodotti sfusi (es. 0.482)." },
+          "unit": { "type": "string", "enum": ["pcs", "kg", "l"], "description": "pcs = a pezzo; kg = a peso; l = a volume." },
+          "unit_price": { "type": "number", "minimum": 0, "description": "Prezzo per unita': EUR/pezzo, EUR/kg o EUR/litro." },
+          "gross_amount": { "type": ["number", "null"], "description": "Importo riga prima dello sconto. Se assente si assume uguale a net_amount." },
+          "discount_amount": { "type": ["number", "null"], "description": "Sconto applicato alla riga, positivo." },
+          "net_amount": { "type": "number", "description": "Importo riga effettivamente pagato." },
+          "vat_rate": { "type": ["number", "null"], "description": "Aliquota IVA in percentuale, es. 4, 10, 22." },
+          "category_hint": { "type": ["string", "null"], "description": "Categoria suggerita in linguaggio naturale, es. 'latticini'. Indicativa: l'app decide." },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1, "description": "Confidenza complessiva dell'estrazione." },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Cosa non era leggibile o non torna. Meglio un warning esplicito di un dato inventato."
+    }
+  }
+}

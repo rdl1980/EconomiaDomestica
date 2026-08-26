@@ -1,0 +1,49 @@
+# --- Segreti: MAI nel repo (il repository e' pubblico) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service-account*.json
+
+# --- Dati personali: MAI nel repo ---
+/scontrini/
+/receipts/
+/dati/
+/data/
+*.dump
+*.sql.gz
+*.csv
+*.xlsx
+# le foto restano su Supabase Storage, non qui
+*.heic
+/uploads/
+
+# --- Dipendenze e build ---
+node_modules/
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# --- Tooling ---
+.pnpm-store/
+coverage/
+.eslintcache
+.supabase/
+
+# --- Mobile (da M5) ---
+/ios/
+/android/
+!/apps/*/ios/.gitkeep
+!/apps/*/android/.gitkeep
+
+# --- Sistema / editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
