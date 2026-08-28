@@ -9,11 +9,23 @@ import { createClient } from '@/lib/supabase/client';
 
 type State = 'idle' | 'sending' | 'sent' | 'error';
 
+/**
+ * Motivi per cui si puo' atterrare qui da un link di accesso fallito.
+ * Senza questa traduzione l'utente tornerebbe al form senza sapere perche',
+ * e riproverebbe lo stesso link scaduto all'infinito.
+ */
+const LANDING_ERRORS: Record<string, string> = {
+  'link-scaduto': 'Quel link non è più valido: i link di accesso durano poco. Te ne mandiamo uno nuovo.',
+  'link-non-valido': 'Il link di accesso non era completo. Richiedine un altro qui sotto.',
+};
+
 export function LoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [state, setState] = useState<State>('idle');
   const [error, setError] = useState<string | null>(null);
+
+  const landingError = LANDING_ERRORS[searchParams.get('error') ?? ''] ?? null;
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -56,6 +68,12 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {landingError && !error ? (
+        <p className="rounded-[var(--radius-control)] bg-warning-soft px-3 py-2.5 text-xs leading-relaxed text-fg-muted">
+          {landingError}
+        </p>
+      ) : null}
+
       <Field label="Email" error={error ?? undefined}>
         <Input
           type="email"

@@ -46,7 +46,13 @@ export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublic = PUBLIC_PATHS.some((p) => path === p || path.startsWith(`${p}/`));
 
-  if (!user && !isPublic) {
+  // Atterraggio del link di accesso: quando `/auth/callback` non e' fra le
+  // redirect consentite in Supabase, GoTrue rimanda alla Site URL portandosi
+  // dietro il `code`. Se lo bloccassimo qui, il codice andrebbe perso e il login
+  // fallirebbe in silenzio. La pagina radice lo inoltra al callback.
+  const isAuthLanding = path === '/' && request.nextUrl.searchParams.has('code');
+
+  if (!user && !isPublic && !isAuthLanding) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     url.searchParams.set('redirect', path);
