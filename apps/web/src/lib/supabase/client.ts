@@ -2,6 +2,7 @@
 
 import { createBrowserClient } from '@supabase/ssr';
 import type { Database } from '@ed/db';
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@/lib/env';
 
 /**
  * Client Supabase per il browser.
@@ -10,8 +11,5 @@ import type { Database } from '@ed/db';
  * Row Level Security lato database, non il fatto che questa chiave sia nascosta.
  */
 export function createClient() {
-  return createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  return createBrowserClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
 }

@@ -41,6 +41,7 @@ puro, senza React ne' Supabase), `packages/db` (schema, migration, tipi).
 | [04 - Analytics](docs/04-analytics.md) | metriche, viste, cosa vogliamo poter chiedere ai dati |
 | [05 - UI/UX](docs/05-ui-ux.md) | direzione visiva e struttura di navigazione |
 | [06 - Roadmap](docs/06-roadmap.md) | milestone da M0 a M6 |
+| [07 - Deploy](docs/07-deploy.md) | impostazioni Vercel, variabili, URL di autenticazione Supabase |
 
 ## Contratti
 
