@@ -1,9 +1,10 @@
 # 06 - Roadmap
 
-> **Stato al 26 agosto 2026** — M0, M1, M2, M3 e M4 sono implementate e
-> compilano; le migration sono verificate su un Postgres reale (in WASM) dalla
-> CI. Manca **l'applicazione delle migration sul progetto Supabase**: finché non
-> viene fatta, l'app non ha un database dietro. Vedi il fondo pagina.
+> **Stato al 28 agosto 2026** — M0, M1, M2, M3 e M4 sono implementate. Le sette
+> migration sono applicate sul progetto Supabase, l'isolamento fra household e'
+> verificato sul database reale, e la CI rigira l'intero schema su un Postgres
+> in WASM a ogni push. Restano il deploy e la prova sul campo: vedi il fondo
+> pagina.
 
 Ogni milestone e' pensata per chiudersi con qualcosa di **usabile davvero**, non con
 un pezzo di infrastruttura. Il criterio e' sempre lo stesso: alla fine della
@@ -94,10 +95,11 @@ divisione spese fra coinquilini, export fiscale.
 
 ### Cosa manca per usarla davvero
 
-1. **Applicare le migration** al progetto Supabase (`npm run db:migrate` con
-   `DATABASE_URL` valorizzata, oppure incollando i file di
-   `packages/db/migrations` nel SQL Editor **in ordine**).
-2. **Deploy su Vercel**, collegando il repository e impostando
+1. ~~Applicare le migration~~ — fatto il 28 agosto 2026, sette migration su
+   Supabase, cinquanta categorie di sistema, bucket privato per le foto.
+2. **Primo accesso**: il login e' via link email, quindi il primo giro deve
+   farlo una persona.
+3. **Deploy su Vercel**, collegando il repository e impostando
    `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
-3. **Opzionale**: `ANTHROPIC_API_KEY` per la lettura automatica delle foto.
+4. **Opzionale**: `ANTHROPIC_API_KEY` per la lettura automatica delle foto.
    Senza, restano l'import JSON e l'inserimento manuale.

@@ -18,7 +18,8 @@
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "db:migrate": "npm run migrate --workspace @ed/db",
-    "db:reset": "npm run reset --workspace @ed/db"
+    "db:reset": "npm run reset --workspace @ed/db",
+    "db:check-rls": "npm run check:rls --workspace @ed/db"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

@@ -14,7 +14,8 @@
     "migrate:status": "node scripts/migrate.mjs --status",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/check-migrations.mjs",
-    "check:migrations": "node scripts/check-migrations.mjs"
+    "check:migrations": "node scripts/check-migrations.mjs",
+    "check:rls": "node scripts/check-rls.mjs"
   },
   "dependencies": {
     "@ed/core": "*",

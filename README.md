@@ -5,9 +5,10 @@ App per la gestione dell'economia domestica: si parte dagli scontrini della spes
 per estendersi a utenze energetiche, telefonia, abbonamenti e qualunque altra voce
 di spesa familiare.
 
-**Stato: M0-M4 implementate.** Spesa e utenze, dalla foto dello scontrino alla
-dashboard, al confronto prezzi fra supermercati. Manca l'applicazione delle
-migration sul progetto Supabase: vedi [Avvio](#avvio).
+**Stato: M0-M4 implementate, schema applicato.** Spesa e utenze, dalla foto dello
+scontrino alla dashboard, al confronto prezzi fra supermercati. Le migration sono
+applicate sul progetto Supabase e l'isolamento fra famiglie e' verificato sul
+database reale.
 
 ## Avvio
 
@@ -25,6 +26,7 @@ npm run dev
 | `npm run typecheck` | TypeScript su tutti i workspace |
 | `npm run db:migrate` | applica le migration mancanti |
 | `npm run db:migrate -- --status` | mostra quali sono applicate |
+| `npm run db:check-rls` | verifica sul database reale che due famiglie non si vedano fra loro (in transazione, con rollback) |
 
 Il progetto e' un monorepo npm: `apps/web` (Next.js), `packages/core` (dominio
 puro, senza React ne' Supabase), `packages/db` (schema, migration, tipi).
